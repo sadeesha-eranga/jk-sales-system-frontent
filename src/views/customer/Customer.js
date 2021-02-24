@@ -12,7 +12,6 @@ import {
   CFormGroup,
   CInput,
   CLabel,
-  CSelect,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 
@@ -61,8 +60,7 @@ const Customer = () => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>
-          <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
+          <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Save</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
         </CCardFooter>
       </CCard>
 
@@ -76,6 +74,8 @@ const Customer = () => {
             fields={fields}
             itemsPerPage={5}
             pagination
+            hover
+            sorter
             scopedSlots = {{
               'status':
                 (item)=>(

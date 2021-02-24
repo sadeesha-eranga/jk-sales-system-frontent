@@ -30,6 +30,12 @@ const _nav =  [
     to: '/customer',
     icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon"/>,
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Order',
+    to: '/order',
+    icon: <CIcon name="cil-task" customClasses="c-sidebar-nav-icon"/>,
+  },
 ]
 
 export default _nav
