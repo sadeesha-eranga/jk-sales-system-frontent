@@ -15,7 +15,7 @@ import {
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 
-const fields = ['id','name', 'nic', 'email', 'action'];
+const fields = ['id','name', 'nic', 'email', 'actions'];
 
 const Customer = () => {
   return (
@@ -27,32 +27,32 @@ const Customer = () => {
         </CCardHeader>
         <CCardBody>
           <CCol sm="12">
-            <CForm action="" method="post" encType="multipart/form-data" >
+            <CForm id="customerForm" >
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="text-input">Name</CLabel>
+                  <CLabel htmlFor="name">Name</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="text-input" name="text-input" placeholder="Enter name" />
+                  <CInput id="name" name="name" placeholder="Enter name" />
                 </CCol>
               </CFormGroup>
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="text-input">NIC</CLabel>
+                  <CLabel htmlFor="nic">NIC</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="text-input" name="text-input" placeholder="Enter NIC number" />
+                  <CInput id="nic" name="nic" placeholder="Enter NIC number" />
                 </CCol>
               </CFormGroup>
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="text-input">Email</CLabel>
+                  <CLabel htmlFor="email">Email</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="text-input" name="text-input" placeholder="Enter email" />
+                  <CInput id="email" name="email" type="email" placeholder="Enter email" />
                 </CCol>
               </CFormGroup>
 
@@ -60,7 +60,7 @@ const Customer = () => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Save</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
+          <CButton id="btnSave" type="submit" size="sm" color="success"><CIcon name="cil-scrubber" /> Save</CButton> <CButton id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
         </CCardFooter>
       </CCard>
 

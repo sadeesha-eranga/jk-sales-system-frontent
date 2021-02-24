@@ -28,14 +28,14 @@ const Stock = () => {
         </CCardHeader>
         <CCardBody>
           <CCol sm="12">
-          <CForm action="" method="post" encType="multipart/form-data" >
+          <CForm id="stockForm">
 
             <CFormGroup row>
               <CCol md="12">
-                <CLabel htmlFor="select">Product</CLabel>
+                <CLabel htmlFor="product">Product</CLabel>
               </CCol>
               <CCol xs="12" md="12">
-                <CSelect custom name="select" id="select">
+                <CSelect custom name="product" id="product">
                   <option value="0">Select a product</option>
                   <option value="1">Option #1</option>
                   <option value="2">Option #2</option>
@@ -46,21 +46,19 @@ const Stock = () => {
 
             <CFormGroup row>
               <CCol md="12">
-                <CLabel htmlFor="text-input">Unit price</CLabel>
+                <CLabel htmlFor="unitPrice">Unit price</CLabel>
               </CCol>
               <CCol xs="12" md="12">
-                <CInput id="text-input" name="text-input" placeholder="Enter unit price" />
-                {/*<CFormText>This is a help text</CFormText>*/}
+                <CInput id="unitPrice" name="unitPrice" placeholder="Enter unit price" />
               </CCol>
             </CFormGroup>
 
             <CFormGroup row>
               <CCol md="12">
-                <CLabel htmlFor="text-input">Total Qty</CLabel>
+                <CLabel htmlFor="totalQty">Total Qty</CLabel>
               </CCol>
               <CCol xs="12" md="12">
-                <CInput id="text-input" name="text-input" placeholder="Enter total qty" />
-                {/*<CFormText>This is a help text</CFormText>*/}
+                <CInput id="totalQty" name="totalQty" placeholder="Enter total qty" />
               </CCol>
 
             </CFormGroup>
@@ -68,7 +66,7 @@ const Stock = () => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Save</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
+          <CButton id="btnSave" type="submit" size="sm" color="success"><CIcon name="cil-scrubber" /> Save</CButton> <CButton id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
         </CCardFooter>
       </CCard>
 
@@ -82,6 +80,8 @@ const Stock = () => {
             fields={fields}
             itemsPerPage={5}
             pagination
+            hover
+            sorter
             scopedSlots = {{
               'status':
                 (item)=>(

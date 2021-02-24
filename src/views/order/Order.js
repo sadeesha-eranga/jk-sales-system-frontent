@@ -1,4 +1,5 @@
 import React  from 'react'
+import './Order.css'
 import {
   CBadge,
   CButton,
@@ -15,7 +16,8 @@ import {
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 
-const fields = ['id','name', 'nic', 'email', 'action'];
+const orderTableFields = ['id', 'customer', 'paymentMethod', 'createdDateTime', 'actions'];
+const itemTableFields = ['stockNumber','product', 'unitPrice', 'amount'];
 
 const Order = () => {
   return (
@@ -31,10 +33,10 @@ const Order = () => {
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="select">Customer</CLabel>
+                  <CLabel htmlFor="customer">Customer</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CSelect custom name="select" id="select">
+                  <CSelect custom name="customer" id="customer">
                     <option value="0">Select a customer</option>
                     <option value="1">Option #1</option>
                     <option value="2">Option #2</option>
@@ -49,12 +51,12 @@ const Order = () => {
                 </CCol>
                 <CCol md="9">
                   <CFormGroup variant="custom-radio" inline>
-                    <CInputRadio custom id="inline-radio1" name="inline-radios" value="CASH" />
-                    <CLabel variant="custom-checkbox" htmlFor="inline-radio1">Cash</CLabel>
+                    <CInputRadio custom id="cash" name="cash" value="CASH" />
+                    <CLabel variant="custom-checkbox" htmlFor="cash">Cash</CLabel>
                   </CFormGroup>
                   <CFormGroup variant="custom-radio" inline>
-                    <CInputRadio custom id="inline-radio2" name="inline-radios" value="CARD" />
-                    <CLabel variant="custom-checkbox" htmlFor="inline-radio2">Card</CLabel>
+                    <CInputRadio custom id="card" name="card" value="CARD" />
+                    <CLabel variant="custom-checkbox" htmlFor="card">Card</CLabel>
                   </CFormGroup>
                 </CCol>
               </CFormGroup>
@@ -66,16 +68,16 @@ const Order = () => {
 
               <CFormGroup row>
                 <CCol md="6">
-                  <CLabel htmlFor="text-input">Stock</CLabel>
+                  <CLabel htmlFor="stock">Stock</CLabel>
                 </CCol>
                 <CCol md="6">
-                  <CLabel htmlFor="text-input">Qty</CLabel>
+                  <CLabel htmlFor="qty">Qty</CLabel>
                 </CCol>
               </CFormGroup>
 
               <CFormGroup row>
                 <CCol xs="6" md="6">
-                  <CSelect custom name="select" id="select">
+                  <CSelect custom name="stock" id="stock">
                     <option value="0">Select Stock</option>
                     <option value="1">Option #1</option>
                     <option value="2">Option #2</option>
@@ -83,18 +85,20 @@ const Order = () => {
                   </CSelect>
                 </CCol>
                 <CCol xs="6" md="6">
-                  <CInput id="text-input" name="text-input" placeholder="Enter Qty" />
+                  <CInput id="qty" name="qty" placeholder="Enter Qty" />
                 </CCol>
                 <CCol md="12">
-                  <CButton size="sm" color="warning"><CIcon name="cil-check" /> Add item</CButton><br/>
+                  <CButton id="addItm" size="sm" color="success"><CIcon name="cil-check" /> Add item</CButton><br/>
                 </CCol>
               </CFormGroup>
 
               <CDataTable
                 items={[]}
-                fields={fields}
+                fields={itemTableFields}
                 itemsPerPage={5}
                 pagination
+                hover
+                sorter
                 scopedSlots = {{
                   'status':
                     (item)=>(
@@ -113,7 +117,7 @@ const Order = () => {
                   <CLabel htmlFor="text-input">Total</CLabel>
                 </CCol>
                 <CCol xs="7" md="7">
-                  <CInput id="text-input" name="text-input" placeholder="Enter total" />
+                  <CInput id="totalTxt" name="text-input" placeholder="Enter total" />
                 </CCol>
               </CFormGroup>
 
@@ -121,7 +125,7 @@ const Order = () => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          <CButton type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Save</CButton> <CButton type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
+          <CButton id="btnSave" type="submit" size="sm" color="success"><CIcon name="cil-scrubber" /> Save</CButton> <CButton id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
         </CCardFooter>
       </CCard>
 
@@ -132,9 +136,11 @@ const Order = () => {
         <CCardBody>
           <CDataTable
             items={[]}
-            fields={fields}
+            fields={orderTableFields}
             itemsPerPage={5}
             pagination
+            hover
+            sorter
             scopedSlots = {{
               'status':
                 (item)=>(
