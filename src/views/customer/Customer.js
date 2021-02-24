@@ -12,18 +12,18 @@ import {
   CFormGroup,
   CInput,
   CLabel,
-  CSelect
+  CSelect,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 
-const fields = ['id','status', 'branch', 'product', 'action'];
+const fields = ['id','name', 'nic', 'email', 'action'];
 
-const StockRequest = () => {
+const Customer = () => {
   return (
     <>
       <CCard>
         <CCardHeader>
-          StockRequest
+          Customer
           <small> Form</small>
         </CCardHeader>
         <CCardBody>
@@ -32,41 +32,31 @@ const StockRequest = () => {
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="select">Product</CLabel>
+                  <CLabel htmlFor="text-input">Name</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CSelect custom name="select" id="select">
-                    <option value="0">Select a product</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
-                  </CSelect>
+                  <CInput id="text-input" name="text-input" placeholder="Enter name" />
                 </CCol>
               </CFormGroup>
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="select">From Branch</CLabel>
+                  <CLabel htmlFor="text-input">NIC</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CSelect custom name="select" id="select">
-                    <option value="0">Select a branch</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
-                  </CSelect>
+                  <CInput id="text-input" name="text-input" placeholder="Enter NIC number" />
                 </CCol>
               </CFormGroup>
 
               <CFormGroup row>
                 <CCol md="12">
-                  <CLabel htmlFor="text-input">Qty</CLabel>
+                  <CLabel htmlFor="text-input">Email</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="text-input" name="text-input" placeholder="Enter qty" />
-                  {/*<CFormText>This is a help text</CFormText>*/}
+                  <CInput id="text-input" name="text-input" placeholder="Enter email" />
                 </CCol>
               </CFormGroup>
+
             </CForm>
           </CCol>
         </CCardBody>
@@ -78,7 +68,7 @@ const StockRequest = () => {
 
       <CCard>
         <CCardHeader>
-          Stock Requests
+          Customers
         </CCardHeader>
         <CCardBody>
           <CDataTable
@@ -103,4 +93,4 @@ const StockRequest = () => {
   )
 }
 
-export default StockRequest
+export default Customer

@@ -15,7 +15,6 @@ import {
   CSelect
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { DocsLink } from '../../reusable';
 
 const fields = ['id','totalQty', 'remainingQty', 'unitPrice', 'action'];
 
@@ -76,8 +75,7 @@ const Stock = () => {
 
       <CCard>
         <CCardHeader>
-          Simple Table
-          <DocsLink name="CModal"/>
+          Stocks
         </CCardHeader>
         <CCardBody>
           <CDataTable
