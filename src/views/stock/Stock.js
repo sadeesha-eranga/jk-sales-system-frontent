@@ -17,7 +17,7 @@ import {
 import CIcon from '@coreui/icons-react';
 import { DocsLink } from '../../reusable';
 
-const fields = ['id','totalQty', 'remainingQty', 'unitPrice'];
+const fields = ['id','totalQty', 'remainingQty', 'unitPrice', 'action'];
 
 const Stock = () => {
   return (

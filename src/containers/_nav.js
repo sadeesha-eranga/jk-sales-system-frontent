@@ -18,6 +18,12 @@ const _nav =  [
     to: '/stock',
     icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon"/>,
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'StockRequest',
+    to: '/stockrequest',
+    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon"/>,
+  },
   // {
   //   _tag: 'CSidebarNavTitle',
   //   _children: ['Theme']
