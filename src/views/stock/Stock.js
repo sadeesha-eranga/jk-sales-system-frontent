@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -16,18 +15,36 @@ import {
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import axios from '../../utils/axios';
+import SwalUtils from '../../utils/SwalUtils';
+import Cookies from 'js-cookie';
 
 const fields = ['id', 'product', 'totalQty', 'remainingQty', 'unitPrice', 'action'];
+const initialValues = {
+  product: 0,
+  unitPrice: 0,
+  totalQty: 0
+};
 
 const Stock = () => {
 
   const [products, setProducts] = useState([]);
   const [stocks, setStocks] = useState([]);
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let errs = {};
+    errs.product = values.product && values.product > 0 ? '' : 'Please select a product';
+    errs.unitPrice = values.unitPrice && values.unitPrice > 0 ? '' : 'Please enter a valid unit price';
+    errs.totalQty = values.totalQty && values.totalQty > 0 ? '' : 'Please enter a valid qty';
+    setErrors(errs);
+    return Object.values(errs).every(value => value === '');
+  };
 
   useEffect(() => {
       axios.get('/products')
         .then(res => {
-          console.log(res.data.products);
+          console.log('products', res.data.products);
           setProducts(res.data.products);
         }).catch(err => {
           console.log(err);
@@ -40,13 +57,55 @@ const Stock = () => {
         }).catch(err => {
           console.log(err);
         });
-
   }, []);
 
   const handleDeleteClick = (e) => {
     const stockId = e.target.value;
     console.log('Stock deleted ID:', stockId);
   }
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setValues({
+      ...values,
+      [name]: value
+    });
+    setErrors({
+      ...errors,
+      [name]: ''
+    });
+  };
+
+  const handleResetBtnClick = () => {
+    setValues(initialValues);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Sbitting---')
+    console.log(values);
+    if (validate()) {
+      console.log('valid');
+      SwalUtils.showLoadingSwal();
+      axios.post('/stocks', {
+        productId: values.product,
+        branchId: Cookies.get('branchId') || 2,
+        unitPrice: values.unitPrice,
+        totalQty: values.totalQty
+      }).then(({ data }) => {
+        SwalUtils.closeSwal();
+        SwalUtils.showSuccessSwal(data.message);
+        setValues(initialValues);
+        // add product to products array
+      }).catch((error) => {
+        SwalUtils.closeSwal();
+        SwalUtils.showErrorSwal(error?.response?.data?.message || 'Something went wrong!');
+      });
+    } else {
+      const errMsg = Object.values(errors).find(err => err !== "");
+      if (errMsg) SwalUtils.showErrorSwal(errMsg);
+    }
+  };
 
   return (
     <>
@@ -57,16 +116,16 @@ const Stock = () => {
         </CCardHeader>
         <CCardBody>
           <CCol sm="12">
-            <CForm id="stockForm">
+            <CForm id="stockForm" >
 
               <CFormGroup row>
                 <CCol md="12">
                   <CLabel htmlFor="product">Product</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CSelect custom name="product" id="product">
-                    <option value="0">Select a product</option>
-                    {products.map(product => <option value={product.id}>{product.name}</option>)}
+                  <CSelect value={values.product} onChange={handleInputChange} custom name="product" id="product">
+                    <option key="0" value="0">Select a product</option>
+                    {products.map(product => <option key={product.id} value={product.id}>{product.name}</option>)}
                   </CSelect>
                 </CCol>
               </CFormGroup>
@@ -76,7 +135,8 @@ const Stock = () => {
                   <CLabel htmlFor="unitPrice">Unit price</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="unitPrice" name="unitPrice" placeholder="Enter unit price"/>
+                  <CInput value={values.unitPrice || ''} onChange={handleInputChange} id="unitPrice" name="unitPrice"
+                          type="number" placeholder="Enter unit price"/>
                 </CCol>
               </CFormGroup>
 
@@ -85,7 +145,8 @@ const Stock = () => {
                   <CLabel htmlFor="totalQty">Total Qty</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="totalQty" name="totalQty" placeholder="Enter total qty"/>
+                  <CInput value={values.totalQty || ''} onChange={handleInputChange} id="totalQty" name="totalQty"
+                          type="number" placeholder="Enter total qty"/>
                 </CCol>
 
               </CFormGroup>
@@ -93,8 +154,11 @@ const Stock = () => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          <CButton className="rightMargin" id="btnSave" type="submit" size="sm" color="success"><CIcon name="cil-scrubber"/> Save</CButton>
-          <CButton id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban"/> Reset</CButton>
+          <CButton onClick={handleSubmit} className="rightMargin" id="btnSave" type="submit" size="sm" color="success">
+            <CIcon name="cil-scrubber"/>
+            Save
+          </CButton>
+          <CButton onClick={handleResetBtnClick} id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban"/> Reset</CButton>
         </CCardFooter>
       </CCard>
 
