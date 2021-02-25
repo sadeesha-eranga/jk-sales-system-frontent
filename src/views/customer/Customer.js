@@ -1,4 +1,4 @@
-import React  from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CBadge,
   CButton,
@@ -14,10 +14,87 @@ import {
   CLabel,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
+import SwalUtils from '../../utils/SwalUtils';
+import axios from '../../utils/axios';
+import Cookies from 'js-cookie';
 
-const fields = ['id','name', 'nic', 'email', 'actions'];
+const fields = ['id','name', 'nic', 'email'];
+const initialValues = {
+  name: '',
+  nic: '',
+  email: ''
+};
 
 const Customer = () => {
+
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const [customers, setCustomers] = useState([]);
+
+  const validate = () => {
+    let errs = {};
+    errs.name = values.name && values.name !== '' ? '' : 'Please select a name';
+    errs.nic = values.nic && values.nic !== '' ? '' : 'Please select a valid nic';
+    errs.email = values.email && values.email !== '' ? '' : 'Please enter a valid email';
+    setErrors(errs);
+    return Object.values(errs).every(value => value === '');
+  };
+
+  useEffect(() => {
+    axios.get('/customers')
+      .then(res => {
+        console.log('customers', res.data.customers);
+        setCustomers(res.data.customers);
+      }).catch(err => {
+      console.log(err);
+    });
+  }, []);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setValues({
+      ...values,
+      [name]: value
+    });
+    setErrors({
+      ...errors,
+      [name]: ''
+    });
+  };
+
+  const handleResetBtnClick = () => {
+    setValues(initialValues);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (validate()) {
+      SwalUtils.showLoadingSwal();
+      axios.post('/customers', {
+        name: values.name,
+        nic: values.nic,
+        email: values.email
+      }).then((resp) => {
+        SwalUtils.closeSwal();
+        SwalUtils.showSuccessSwal(resp.data.message);
+        setValues(initialValues);
+        axios.get('/customers')
+          .then(res => {
+            console.log('customers', res.data.customers);
+            setCustomers(res.data.customers);
+          }).catch(err => {
+          console.log(err);
+        });
+      }).catch((error) => {
+        SwalUtils.closeSwal();
+        SwalUtils.showErrorSwal(error?.response?.data?.message || 'Something went wrong!');
+      });
+    } else {
+      const errMsg = Object.values(errors).find(err => err !== "");
+      if (errMsg) SwalUtils.showErrorSwal(errMsg);
+    }
+  };
+
   return (
     <>
       <CCard>
@@ -34,7 +111,8 @@ const Customer = () => {
                   <CLabel htmlFor="name">Name</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="name" name="name" placeholder="Enter name" />
+                  <CInput value={values.name || ''} onChange={handleInputChange} id="name" name="name"
+                          placeholder="Enter name"/>
                 </CCol>
               </CFormGroup>
 
@@ -43,7 +121,8 @@ const Customer = () => {
                   <CLabel htmlFor="nic">NIC</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="nic" name="nic" placeholder="Enter NIC number" />
+                  <CInput value={values.nic || ''} onChange={handleInputChange} id="nic" name="nic"
+                          placeholder="Enter NIC number"/>
                 </CCol>
               </CFormGroup>
 
@@ -52,7 +131,8 @@ const Customer = () => {
                   <CLabel htmlFor="email">Email</CLabel>
                 </CCol>
                 <CCol xs="12" md="12">
-                  <CInput id="email" name="email" type="email" placeholder="Enter email" />
+                  <CInput value={values.email || ''} onChange={handleInputChange} id="email" name="email" type="email"
+                          placeholder="Enter email"/>
                 </CCol>
               </CFormGroup>
 
@@ -60,7 +140,11 @@ const Customer = () => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          <CButton id="btnSave" type="submit" size="sm" color="success"><CIcon name="cil-scrubber" /> Save</CButton> <CButton id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
+          <CButton onClick={handleSubmit} className="rightMargin" id="btnSave" type="submit" size="sm" color="success">
+            <CIcon name="cil-scrubber"/>
+            Save
+          </CButton>
+          <CButton onClick={handleResetBtnClick} id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban"/> Reset</CButton>
         </CCardFooter>
       </CCard>
 
@@ -70,22 +154,12 @@ const Customer = () => {
         </CCardHeader>
         <CCardBody>
           <CDataTable
-            items={[]}
+            items={customers}
             fields={fields}
             itemsPerPage={5}
             pagination
             hover
             sorter
-            scopedSlots = {{
-              'status':
-                (item)=>(
-                  <td>
-                    <CBadge color={''}>
-                      {item.status}
-                    </CBadge>
-                  </td>
-                )
-            }}
           />
         </CCardBody>
       </CCard>
