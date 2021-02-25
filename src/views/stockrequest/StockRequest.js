@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,

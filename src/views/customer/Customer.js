@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -16,7 +15,6 @@ import {
 import CIcon from '@coreui/icons-react';
 import SwalUtils from '../../utils/SwalUtils';
 import axios from '../../utils/axios';
-import Cookies from 'js-cookie';
 
 const fields = ['id','name', 'nic', 'email'];
 const initialValues = {
