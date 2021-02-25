@@ -11,7 +11,6 @@ instance.interceptors.request.use(
   request => {
     if (Cookies.get('accessToken') !== undefined) {
       request.headers.Authorization = 'Bearer ' + Cookies.get('accessToken');
-      // request.headers.Authorization = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicmFuY2hfdXNlciIsInJvbGVzIjpbIk5PUk1BTCJdLCJleHAiOjE2MTQzMTkyMDUsImlhdCI6MTYxNDIzMjgwNX0.1-cNwtkSszAFoN4NkuR2IULbUQM_FJIIvZ39nBce-9k';
     }
     return request;
   },

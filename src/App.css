@@ -61,3 +61,7 @@
     box-shadow: 0 2.5em 0 0;
   }
 }
+
+.rightMargin {
+  margin-right: 5px;
+}

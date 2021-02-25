@@ -38,7 +38,7 @@ const Login = () => {
   const loginButtonClick = (e) => {
     e.preventDefault();
     if (username !== '' && password !== '') {
-
+      SwalUtils.showLoadingSwal();
       axios.post('/branches/users/login', { username, password })
         .then(response => {
           const { accessToken, role } = response.data;
