@@ -8,8 +8,15 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import Cookies from 'js-cookie';
 
 const TheHeaderDropdown = () => {
+
+  const handleLogoutClick = () => {
+    Cookies.remove('accessToken', { path: '' });
+    window.location = '/login'
+  }
+
   return (
     <CDropdown
       inNav
@@ -19,14 +26,14 @@ const TheHeaderDropdown = () => {
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
           <CImg
-            src={'avatars/8.jpg'}
+            src={'avatars/img_1.png'}
             className="c-avatar-img"
             alt="admin@bootstrapmaster.com"
           />
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem>
+        <CDropdownItem onClick={handleLogoutClick}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Log Out
         </CDropdownItem>
