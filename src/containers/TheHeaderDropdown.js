@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  CBadge,
+  // CBadge,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,

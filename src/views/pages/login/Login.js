@@ -1,5 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState} from 'react';
+import axios from '../../../utils/axios';
+import Cookies from 'js-cookie';
+import SwalUtils from '../../../utils/SwalUtils';
+
 import {
   CButton,
   CCard,
@@ -17,6 +20,40 @@ import {
 import CIcon from '@coreui/icons-react'
 
 const Login = () => {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+
+  const handleUsernameChange = (event) => {
+    const username = event.target.value;
+    setUsername(username);
+  };
+
+  const handlePasswordChange = (event) => {
+    const password = event.target.value;
+    setPassword(password);
+  };
+
+  const loginButtonClick = (e) => {
+    e.preventDefault();
+    if (username !== '' && password !== '') {
+
+      axios.post('/branches/users/login', { username, password })
+        .then(response => {
+          const { accessToken, role } = response.data;
+          Cookies.set('accessToken', accessToken, { path: '/' });
+          Cookies.set('userRole', role, { path: '/' });
+          window.location = '/dashboard';
+        }).catch(error => {
+        console.log(error)
+        SwalUtils.showErrorSwal('Invalid credentials');
+      })
+    } else {
+      SwalUtils.showErrorSwal('Please enter username and password!');
+    }
+  }
+
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -25,7 +62,7 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
+                  <CForm action="#">
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
@@ -34,7 +71,7 @@ const Login = () => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Username" autoComplete="username" />
+                      <CInput type="text" placeholder="Username" onChange={handleUsernameChange} autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -42,29 +79,14 @@ const Login = () => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Password" autoComplete="current-password" />
+                      <CInput type="password" placeholder="Password" onChange={handlePasswordChange} autoComplete="current-password" />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">Login</CButton>
-                      </CCol>
-                      <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
+                        <CButton onClick={loginButtonClick} color="primary" className="px-4">Login</CButton>
                       </CCol>
                     </CRow>
                   </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                      labore et dolore magna aliqua.</p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>Register Now!</CButton>
-                    </Link>
-                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>
