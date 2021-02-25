@@ -50,7 +50,7 @@ const Stock = () => {
           console.log(err);
         });
 
-      axios.get('/stocks')
+      axios.get('/stocks/' + Cookies.get('branchId'))
         .then(res => {
           console.log('stocks', res.data.stocks);
           setStocks(res.data.stocks);
@@ -67,7 +67,7 @@ const Stock = () => {
       .then(resp => {
         SwalUtils.closeSwal();
         SwalUtils.showSuccessSwal(resp.data.message);
-        axios.get('/stocks')
+        axios.get('/stocks/' + Cookies.get('branchId'))
           .then(res => {
             setStocks(res.data.stocks);
           }).catch(err => {
@@ -108,7 +108,7 @@ const Stock = () => {
         SwalUtils.closeSwal();
         SwalUtils.showSuccessSwal(resp.data.message);
         setValues(initialValues);
-        axios.get('/stocks')
+        axios.get('/stocks/' + Cookies.get('branchId'))
           .then(res => {
             setStocks(res.data.stocks);
           }).catch(err => {
