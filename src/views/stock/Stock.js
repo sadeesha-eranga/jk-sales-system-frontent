@@ -50,7 +50,7 @@ const Stock = () => {
           console.log(err);
         });
 
-    axios.get('/stocks')
+      axios.get('/stocks')
         .then(res => {
           console.log('stocks', res.data.stocks);
           setStocks(res.data.stocks);
@@ -62,6 +62,21 @@ const Stock = () => {
   const handleDeleteClick = (e) => {
     const stockId = e.target.value;
     console.log('Stock deleted ID:', stockId);
+    SwalUtils.showLoadingSwal();
+    axios.delete('/stocks/' + stockId)
+      .then(resp => {
+        SwalUtils.closeSwal();
+        SwalUtils.showSuccessSwal(resp.data.message);
+        axios.get('/stocks')
+          .then(res => {
+            setStocks(res.data.stocks);
+          }).catch(err => {
+          console.log(err);
+        });
+      }).catch(err => {
+        SwalUtils.closeSwal();
+        SwalUtils.showErrorSwal(err?.response?.data?.message || 'Something went wrong!');
+      });
   }
 
   const handleInputChange = (event) => {
@@ -82,21 +97,23 @@ const Stock = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Sbitting---')
-    console.log(values);
     if (validate()) {
-      console.log('valid');
       SwalUtils.showLoadingSwal();
       axios.post('/stocks', {
         productId: values.product,
-        branchId: Cookies.get('branchId') || 2,
+        branchId: Cookies.get('branchId') || 0,
         unitPrice: values.unitPrice,
         totalQty: values.totalQty
-      }).then(({ data }) => {
+      }).then((resp) => {
         SwalUtils.closeSwal();
-        SwalUtils.showSuccessSwal(data.message);
+        SwalUtils.showSuccessSwal(resp.data.message);
         setValues(initialValues);
-        // add product to products array
+        axios.get('/stocks')
+          .then(res => {
+            setStocks(res.data.stocks);
+          }).catch(err => {
+          console.log(err);
+        });
       }).catch((error) => {
         SwalUtils.closeSwal();
         SwalUtils.showErrorSwal(error?.response?.data?.message || 'Something went wrong!');

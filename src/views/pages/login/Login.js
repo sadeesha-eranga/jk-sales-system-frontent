@@ -41,9 +41,11 @@ const Login = () => {
       SwalUtils.showLoadingSwal();
       axios.post('/branches/users/login', { username, password })
         .then(response => {
-          const { accessToken, role } = response.data;
+          const { accessToken, role, userId, branchId } = response.data;
           Cookies.set('accessToken', accessToken, { path: '/' });
           Cookies.set('userRole', role, { path: '/' });
+          Cookies.set('userId', userId, { path: '/' });
+          Cookies.set('branchId', branchId, { path: '/' });
           window.location = '/dashboard';
         }).catch(error => {
         console.log(error)

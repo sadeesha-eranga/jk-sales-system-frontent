@@ -23,6 +23,8 @@ instance.interceptors.response.use(
     const status = error.response ? error.response.status : 0;
     if (status === 401) {
       window.location = "/login";
+    } else {
+      return Promise.reject(error);
     }
   }
 );
