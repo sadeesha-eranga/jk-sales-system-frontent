@@ -65,3 +65,15 @@
 .rightMargin {
   margin-right: 5px;
 }
+
+#addItm {
+  float: right;
+  margin-top: 10px;
+}
+
+#totalLabel {
+  font-size: 120%;
+  font-weight: bold;
+  float: right;
+  color: green;
+}
