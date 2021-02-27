@@ -120,59 +120,62 @@ const StockRequest = () => {
 
   return (
     <>
-      <CCard>
-        <CCardHeader>
-          StockRequest
-          <small> Form</small>
-        </CCardHeader>
-        <CCardBody>
-          <CCol sm="12">
-            <CForm id="stockRequestForm" >
+      {Cookies.get('userRole') === 'HEAD_OFFICE_ADMIN' ? null :
+        <CCard>
+          <CCardHeader>
+            StockRequest
+            <small> Form</small>
+          </CCardHeader>
+          <CCardBody>
+            <CCol sm="12">
+              <CForm id="stockRequestForm" >
 
-              <CFormGroup row>
-                <CCol md="12">
-                  <CLabel htmlFor="product">Product</CLabel>
-                </CCol>
-                <CCol xs="12" md="12">
-                  <CSelect value={values.product} onChange={handleInputChange} custom name="product" id="product">
-                    <option key="0" value="0">Select a product</option>
-                    {products.map(product => <option key={product.id} value={product.id}>{product.name}</option>)}
-                  </CSelect>
-                </CCol>
-              </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="12">
+                    <CLabel htmlFor="product">Product</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="12">
+                    <CSelect value={values.product} onChange={handleInputChange} custom name="product" id="product">
+                      <option key="0" value="0">Select a product</option>
+                      {products.map(product => <option key={product.id} value={product.id}>{product.name}</option>)}
+                    </CSelect>
+                  </CCol>
+                </CFormGroup>
 
-              <CFormGroup row>
-                <CCol md="12">
-                  <CLabel htmlFor="fromBranch">From Branch</CLabel>
-                </CCol>
-                <CCol xs="12" md="12">
-                  <CSelect value={values.branch} onChange={handleInputChange} custom name="branch" id="branch">
-                    <option key="0" value="0">Select a branch</option>
-                    {branches.map(branch => <option key={branch.id} value={branch.id}>{branch.name} - {branch.type}</option>)}
-                  </CSelect>
-                </CCol>
-              </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="12">
+                    <CLabel htmlFor="fromBranch">From Branch</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="12">
+                    <CSelect value={values.branch} onChange={handleInputChange} custom name="branch" id="branch">
+                      <option key="0" value="0">Select a branch</option>
+                      {branches.map(branch => <option key={branch.id} value={branch.id}>{branch.name} - {branch.type}</option>)}
+                    </CSelect>
+                  </CCol>
+                </CFormGroup>
 
-              <CFormGroup row>
-                <CCol md="12">
-                  <CLabel htmlFor="qty">Qty</CLabel>
-                </CCol>
-                <CCol xs="12" md="12">
-                  <CInput value={values.qty || ''} onChange={handleInputChange} id="qty" name="qty"
-                          type="number" placeholder="Enter quantity"/>
-                </CCol>
-              </CFormGroup>
-            </CForm>
-          </CCol>
-        </CCardBody>
-        <CCardFooter>
-          <CButton onClick={handleSubmit} className="rightMargin" id="btnSave" type="submit" size="sm" color="success">
-            <CIcon name="cil-scrubber"/>
-            Save
-          </CButton>
-          <CButton onClick={handleResetBtnClick} id="btnReset" type="reset" size="sm" color="danger"><CIcon name="cil-ban"/> Reset</CButton>
-        </CCardFooter>
-      </CCard>
+                <CFormGroup row>
+                  <CCol md="12">
+                    <CLabel htmlFor="qty">Qty</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="12">
+                    <CInput value={values.qty || ''} onChange={handleInputChange} id="qty" name="qty"
+                            type="number" placeholder="Enter quantity"/>
+                  </CCol>
+                </CFormGroup>
+              </CForm>
+            </CCol>
+          </CCardBody>
+          <CCardFooter>
+            <CButton onClick={handleSubmit} className="rightMargin" id="btnSave" type="submit" size="sm" color="success">
+              <CIcon name="cil-scrubber"/>
+              Save
+            </CButton>
+            <CButton onClick={handleResetBtnClick} id="btnReset" type="reset" size="sm" color="danger"><CIcon
+              name="cil-ban"/> Reset</CButton>
+          </CCardFooter>
+        </CCard>
+      }
 
       <CCard>
         <CCardHeader>
