@@ -4,9 +4,7 @@ import {
   CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCol,
-  CProgress,
   CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'

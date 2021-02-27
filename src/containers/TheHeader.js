@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   CHeader,
   CToggler,
-  CHeaderBrand,
   CHeaderNav
 } from '@coreui/react'
 
@@ -37,10 +36,6 @@ const TheHeader = () => {
         className="ml-3 d-md-down-none"
         onClick={toggleSidebar}
       />
-      <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        {/*<h1>Hello</h1>*/}
-        {/*<CIcon name="logo" height="48" alt="Logo"/>*/}
-      </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
       </CHeaderNav>

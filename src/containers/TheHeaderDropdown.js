@@ -1,14 +1,14 @@
 import React from 'react'
 import {
-  // CBadge,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CImg
+  CButton
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import Cookies from 'js-cookie';
+import SimpleLineIcon from 'react-simple-line-icons';
 
 const TheHeaderDropdown = () => {
 
@@ -25,11 +25,9 @@ const TheHeaderDropdown = () => {
     >
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
-          <CImg
-            src={'avatars/img_1.png'}
-            className="c-avatar-img"
-            alt="Profile image"
-          />
+          <CButton >
+            <SimpleLineIcon name="power" color="red" style={{marginRight: "10px", fontWeight: "bold"}} />
+          </CButton>
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
