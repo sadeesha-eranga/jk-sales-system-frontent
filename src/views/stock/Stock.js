@@ -62,21 +62,25 @@ const Stock = () => {
   const handleDeleteClick = (e) => {
     const stockId = e.target.value;
     console.log('Stock deleted ID:', stockId);
-    SwalUtils.showLoadingSwal();
-    axios.delete('/stocks/' + stockId)
-      .then(resp => {
-        SwalUtils.closeSwal();
-        SwalUtils.showSuccessSwal(resp.data.message);
-        axios.get('/stocks/' + Cookies.get('branchId'))
-          .then(res => {
-            setStocks(res.data.stocks);
+    SwalUtils.showConfirmationSwal('Do you want to delete this stock?').then((result) => {
+      if (result.value) {
+        SwalUtils.showLoadingSwal();
+        axios.delete('/stocks/' + stockId)
+          .then(resp => {
+            SwalUtils.closeSwal();
+            SwalUtils.showSuccessSwal(resp.data.message);
+            axios.get('/stocks/' + Cookies.get('branchId'))
+              .then(res => {
+                setStocks(res.data.stocks);
+              }).catch(err => {
+              console.log(err);
+            });
           }).catch(err => {
-          console.log(err);
+          SwalUtils.closeSwal();
+          SwalUtils.showErrorSwal(err?.response?.data?.message || 'Something went wrong!');
         });
-      }).catch(err => {
-        SwalUtils.closeSwal();
-        SwalUtils.showErrorSwal(err?.response?.data?.message || 'Something went wrong!');
-      });
+      }
+    });
   }
 
   const handleInputChange = (event) => {
