@@ -129,6 +129,7 @@ const Order = () => {
           .then(res => {
             console.log('orders', res.data.customerOrders);
             setOrders(res.data.customerOrders);
+            setItems([]);
           }).catch(err => {
           console.log(err);
         });

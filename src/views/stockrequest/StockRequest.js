@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -18,7 +19,7 @@ import axios from '../../utils/axios';
 import SwalUtils from '../../utils/SwalUtils';
 import Cookies from 'js-cookie';
 
-const fields = ['id','status', 'branch', 'product', 'action'];
+const fields = ['id', 'branch', 'product', 'status', 'actions'];
 const initialValues = {
   product: 0,
   branch: 0,
@@ -29,7 +30,8 @@ const StockRequest = () => {
 
   const [products, setProducts] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [stockRequests, setStockRequests] = useState([]);
+  const [sentStockRequests, setSentStockRequests] = useState([]);
+  const [receivedStockRequests, setReceivedStockRequests] = useState([]);
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
 
@@ -59,10 +61,18 @@ const StockRequest = () => {
       console.log(err);
     });
 
-    axios.get('/stocks/requests/' + Cookies.get('branchId'))
+    axios.get('/stocks/requests/received/' + Cookies.get('branchId'))
       .then(res => {
         console.log('stockRequests', JSON.stringify(res.data.stockRequests));
-        setStockRequests(res.data.stockRequests);
+        setReceivedStockRequests(res.data.stockRequests);
+      }).catch(err => {
+      console.log(err);
+    });
+
+    axios.get('/stocks/requests/sent/' + Cookies.get('branchId'))
+      .then(res => {
+        console.log('stockRequests', JSON.stringify(res.data.stockRequests));
+        setSentStockRequests(res.data.stockRequests);
       }).catch(err => {
       console.log(err);
     });
@@ -95,16 +105,16 @@ const StockRequest = () => {
       SwalUtils.showLoadingSwal();
       axios.post('/stocks/requests', {
         productId: values.product,
-        fromBranchId: values.branch,
-        toBranchId: Cookies.get('branchId'),
+        fromBranchId: Cookies.get('branchId'),
+        toBranchId: values.branch,
         qty: values.qty
       }).then((resp) => {
         SwalUtils.closeSwal();
         SwalUtils.showSuccessSwal(resp.data.message);
         setValues(initialValues);
-        axios.get('/stocks/requests/' + Cookies.get('branchId'))
+        axios.get('/stocks/requests/sent/' + Cookies.get('branchId'))
           .then(res => {
-            setStockRequests(res.data.stockRequests);
+            setSentStockRequests(res.data.stockRequests);
           }).catch(err => {
           console.log(err);
         });
@@ -149,7 +159,10 @@ const StockRequest = () => {
                   <CCol xs="12" md="12">
                     <CSelect value={values.branch} onChange={handleInputChange} custom name="branch" id="branch">
                       <option key="0" value="0">Select a branch</option>
-                      {branches.map(branch => <option key={branch.id} value={branch.id}>{branch.name} - {branch.type}</option>)}
+                      {branches.filter(branch => branch.id != Cookies.get('branchId'))
+                        .map(branch => <option key={branch.id} value={branch.id}>
+                          {branch.name} - {branch.type === 'NORMAL' ? 'BRANCH' : 'HEAD_OFFICE'}
+                        </option>)}
                     </CSelect>
                   </CCol>
                 </CFormGroup>
@@ -168,8 +181,7 @@ const StockRequest = () => {
           </CCardBody>
           <CCardFooter>
             <CButton onClick={handleSubmit} className="rightMargin" id="btnSave" type="submit" size="sm" color="success">
-              <CIcon name="cil-scrubber"/>
-              Save
+              <CIcon name="cil-scrubber"/> Save
             </CButton>
             <CButton onClick={handleResetBtnClick} id="btnReset" type="reset" size="sm" color="danger"><CIcon
               name="cil-ban"/> Reset</CButton>
@@ -179,11 +191,11 @@ const StockRequest = () => {
 
       <CCard>
         <CCardHeader>
-          Stock Requests
+          Received Stock Requests
         </CCardHeader>
         <CCardBody>
           <CDataTable
-            items={stockRequests.map(sr => ({...sr, product: sr.product.name, branch: sr.fromBranch.name}))}
+            items={receivedStockRequests.map(sr => ({...sr, product: sr.product.name, branch: sr.fromBranch.name}))}
             fields={fields}
             itemsPerPage={5}
             pagination
@@ -191,7 +203,7 @@ const StockRequest = () => {
             sorter
             scopedSlots={
               {
-                'action': (item) => (<td>
+                'actions': (item) => (<td>
                   <CButton
                     key={item.id}
                     color='secondary'
@@ -202,14 +214,104 @@ const StockRequest = () => {
                   >
                     View
                   </CButton>
-                </td>)
+                  <CButton
+                    key={item.id}
+                    color='success'
+                    size='sm'
+                    className="m-2"
+                    value={item.id}
+                    onClick={(e) => handleViewClick(e)}
+                  >
+                    Accept
+                  </CButton>
+                  <CButton
+                    key={item.id}
+                    color='danger'
+                    size='sm'
+                    className="m-2"
+                    value={item.id}
+                    onClick={(e) => handleViewClick(e)}
+                  >
+                    Reject
+                  </CButton>
+                </td>),
+                'status':
+                  (item)=>(
+                    <td>
+                      <CBadge color={getBadge(item.status)}>
+                        {item.status}
+                      </CBadge>
+                    </td>
+                  )
               }
             }
           />
         </CCardBody>
       </CCard>
+
+      {Cookies.get('userRole') === 'HEAD_OFFICE_ADMIN' ? null : <CCard>
+        <CCardHeader>
+          Sent Stock Requests
+        </CCardHeader>
+        <CCardBody>
+          <CDataTable
+            items={sentStockRequests.map(sr => ({...sr, product: sr.product.name, branch: sr.toBranch.name}))}
+            fields={fields}
+            itemsPerPage={5}
+            pagination
+            hover
+            sorter
+            scopedSlots={
+              {
+                'actions': (item) => (<td>
+                  <CButton
+                    key={item.id}
+                    color='secondary'
+                    size='sm'
+                    className="m-2"
+                    value={item.id}
+                    onClick={(e) => handleViewClick(e)}
+                  >
+                    View
+                  </CButton>
+                  <CButton
+                    key={item.id}
+                    color='danger'
+                    size='sm'
+                    className="m-2"
+                    value={item.id}
+                    onClick={(e) => handleViewClick(e)}
+                  >
+                    Cancel
+                  </CButton>
+                </td>),
+                'status':
+                  (item)=>(
+                    <td>
+                      <CBadge color={getBadge(item.status)}>
+                        {item.status}
+                      </CBadge>
+                    </td>
+                  )
+              }
+            }
+          />
+        </CCardBody>
+      </CCard>}
     </>
   )
+}
+
+const getBadge = status => {
+  switch (status) {
+    case 'DELIVIRED': return 'success'
+    case 'ON_DELIVERY': return 'secondary'
+    case 'ACCEPTED': return 'secondary'
+    case 'PENDING': return 'warning'
+    case 'RETURNED': return 'danger'
+    case 'CANCELLED': return 'primary'
+    default: return 'primary'
+  }
 }
 
 export default StockRequest
