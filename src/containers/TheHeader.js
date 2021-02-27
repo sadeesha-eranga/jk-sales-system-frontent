@@ -6,10 +6,6 @@ import {
   CHeaderBrand,
   CHeaderNav
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-
-// routes config
-// import routes from '../routes'
 
 import {
   TheHeaderDropdown
@@ -42,8 +38,8 @@ const TheHeader = () => {
         onClick={toggleSidebar}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <h1>Hello</h1>
-        <CIcon name="logo" height="48" alt="Logo"/>
+        {/*<h1>Hello</h1>*/}
+        {/*<CIcon name="logo" height="48" alt="Logo"/>*/}
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">

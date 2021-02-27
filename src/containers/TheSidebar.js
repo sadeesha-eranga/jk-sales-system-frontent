@@ -1,18 +1,16 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   CCreateElement,
   CSidebar,
   CSidebarBrand,
+  CSidebarMinimizer,
   CSidebarNav,
   CSidebarNavDivider,
-  CSidebarNavTitle,
-  CSidebarMinimizer,
   CSidebarNavDropdown,
   CSidebarNavItem,
+  CSidebarNavTitle,
 } from '@coreui/react'
-
-import CIcon from '@coreui/icons-react'
 
 // sidebar nav config
 import navigation from './_nav'
@@ -27,16 +25,7 @@ const TheSidebar = () => {
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-        <CIcon
-          className="c-sidebar-brand-full"
-          name="logo-negative"
-          height={35}
-        />
-        <CIcon
-          className="c-sidebar-brand-minimized"
-          name="sygnet"
-          height={35}
-        />
+        <h5 style={{fontWeight: "bold"}}>JK Sales System</h5>
       </CSidebarBrand>
       <CSidebarNav>
 
