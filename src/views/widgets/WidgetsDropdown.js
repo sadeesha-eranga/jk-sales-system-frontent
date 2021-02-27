@@ -1,35 +1,30 @@
-import React, {useEffect} from 'react'
-import {
-  CWidgetDropdown,
-  CRow,
-  CCol,
-  CDropdown,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownToggle
-} from '@coreui/react'
+import React, { useEffect, useState } from 'react'
+import { CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CWidgetDropdown } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import ChartLineSimple from '../charts/ChartLineSimple'
 import ChartBarSimple from '../charts/ChartBarSimple'
 import axios from '../../utils/axios';
-import SwalUtils from '../../utils/SwalUtils';
+import Cookies from 'js-cookie';
 
 const WidgetsDropdown = () => {
 
+  const [data, setData] = useState({});
+
   useEffect(() => {
-    axios.get(`/dashboard/1`)
-      .then(({ data }) => {
-        console.log(data);
-      }).catch(() => SwalUtils.showErrorSwal("Couldn't fetch data from the server!"));
+    let branchId = Cookies.get('branchId');
+    axios.get(`/dashboard/${branchId}`)
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data);
+      }).catch((e) => {console.log(e)});
   }, [])
 
-  // render
   return (
     <CRow>
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-primary"
-          header="2"
+          header={data.branchCount >= 0 ? data.branchCount.toString() : '...'}
           text="Branches"
           footerSlot={
             <ChartLineSimple
@@ -48,10 +43,7 @@ const WidgetsDropdown = () => {
               <CIcon name="cil-settings"/>
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
+              <CDropdownItem>View reports</CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
         </CWidgetDropdown>
@@ -60,7 +52,7 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-info"
-          header="100"
+          header={data.stockRequestCount >= 0 ? data.stockRequestCount.toString() : '...'}
           text="Stock Request"
           footerSlot={
             <ChartLineSimple
@@ -80,10 +72,7 @@ const WidgetsDropdown = () => {
               <CIcon name="cil-settings"/>
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
+              <CDropdownItem>View reports</CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
         </CWidgetDropdown>
@@ -92,7 +81,7 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-warning"
-          header="1500"
+          header={data.customerCount >= 0 ? data.customerCount.toString() : '...'}
           text="Customers"
           footerSlot={
             <ChartLineSimple
@@ -112,10 +101,7 @@ const WidgetsDropdown = () => {
               <CIcon name="cil-settings"/>
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
+              <CDropdownItem>View reports</CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
         </CWidgetDropdown>
@@ -124,7 +110,7 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-danger"
-          header="200"
+          header={data.stockCount >= 0 ? data.stockCount.toString() : '...'}
           text="Stocks"
           footerSlot={
             <ChartBarSimple
@@ -137,14 +123,11 @@ const WidgetsDropdown = () => {
           }
         >
           <CDropdown>
-            <CDropdownToggle caret className="text-white" color="transparent">
+            <CDropdownToggle color="transparent">
               <CIcon name="cil-settings"/>
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
+              <CDropdownItem>View reports</CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
         </CWidgetDropdown>

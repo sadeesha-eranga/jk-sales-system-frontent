@@ -25,7 +25,7 @@ const TheSidebar = () => {
       onShowChange={(val) => dispatch({type: 'set', sidebarShow: val })}
     >
       <CSidebarBrand className="d-md-down-none" to="/">
-        <h5 style={{fontWeight: "bold"}}>JK Sales System</h5>
+        <h5 style={{fontWeight: "bold", color: "gray"}}>JK Sales System</h5>
       </CSidebarBrand>
       <CSidebarNav>
 

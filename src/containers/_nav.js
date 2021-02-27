@@ -1,7 +1,8 @@
-import React from 'react'
-import CIcon from '@coreui/icons-react'
+import React from 'react';
+import CIcon from '@coreui/icons-react';
+// import Cookies from 'js-cookie';
 
-const _nav =  [
+let _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Dashboard',
@@ -32,6 +33,10 @@ const _nav =  [
     to: '/order',
     icon: <CIcon name="cil-task" customClasses="c-sidebar-nav-icon"/>,
   },
-]
+];
+
+// if (Cookies.get('userRole') === 'HEAD_OFFICE_ADMIN') {
+//   _nav = _nav.filter(path => path.name !== 'StockRequest');
+// }
 
 export default _nav
